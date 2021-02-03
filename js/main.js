@@ -1,19 +1,15 @@
 'use strict'
 
-const getZeroFromNegativeNumber = (num) => num < 0 ? 0 : num;
-
 const getRandomPositiveInteger = (min, max) => {
-  const minValue = getZeroFromNegativeNumber(min);
-  const maxValue = getZeroFromNegativeNumber(max);
-  if (minValue > maxValue) {
-    return minValue;
+  if (min > max) {
+    return min;
   }
 
-  let rand = minValue + Math.random() * (maxValue + 1 - minValue);
+  const rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 }
 
-export const getRandomFloatingPointNumber = (min, max, digitsAfterDot) => {
+const getRandomFloatingPointNumber = (min, max, digitsAfterDot) => {
   if (digitsAfterDot) {
     const auxiliaryNumber = 10 * digitsAfterDot;
     const minInteger = min * auxiliaryNumber;
