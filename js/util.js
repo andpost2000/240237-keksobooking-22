@@ -37,12 +37,12 @@ export const makeUniqueRandomIntegerGenerator = (min, max) => {
 };
 
 export const getRandomCountArray = (array) => {
-  const max = array.length - 1;
-  const count = getRandomPositiveInteger(0, max);
-  const getUniqueRandomInteger = makeUniqueRandomIntegerGenerator(0, max);
+  const lastIndex = array.length - 1;
+  const length = getRandomPositiveInteger(0, lastIndex);
+  const getUniqueRandomInteger = makeUniqueRandomIntegerGenerator(0, lastIndex);
   const result = [];
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < length; i++) {
     const uiniqueIndex = getUniqueRandomInteger();
     result.push(array[uiniqueIndex]);
   }
