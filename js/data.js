@@ -13,6 +13,17 @@ const SETTINGS = {
   title: 'Отличное предложение!',
   guests: { min: 1, max: 10 },
   description: 'Хорошее местоположение, новая мебель',
+  location: {
+    x: {
+      min: 35.6500,
+      max: 35.7000,
+    },
+    y: {
+      min: 139.70000,
+      max: 139.80000,
+    },
+    toFixLength: 5,
+  },
 };
 const OFFER_TYPE = ['palace', 'flat', 'house', 'bungalow'];
 const TIME = ['12:00', '13:00', '14:00'];
@@ -22,8 +33,8 @@ const PHOTO_URLS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http:
 const createItem = () => {
 
   const location = {
-    x: getRandomFloatingPointNumber(35.65000, 35.70000, 5),
-    y: getRandomFloatingPointNumber(139.70000, 139.80000, 5),
+    x: getRandomFloatingPointNumber(SETTINGS.location.x.min, SETTINGS.location.x.max, SETTINGS.location.toFixLength),
+    y: getRandomFloatingPointNumber(SETTINGS.location.y.min, SETTINGS.location.y.max, SETTINGS.location.toFixLength),
   };
 
   return {
@@ -31,7 +42,7 @@ const createItem = () => {
       avatar: `im/avatars/user0${getRandomPositiveInteger(SETTINGS.avatars.min, SETTINGS.avatars.max)}`,
     },
     offer: {
-      title: 'Отличное предложение!',
+      title: SETTINGS.title,
       address: `${location.x}, ${location.y}`,
       price: getRandomPositiveInteger(SETTINGS.price.min, SETTINGS.price.max),
       type: OFFER_TYPE[getRandomPositiveInteger(0, OFFER_TYPE.length - 1)],
@@ -40,7 +51,7 @@ const createItem = () => {
       checkIn: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
       checkOut: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
       fetures: getRandomCountArray(FEATURES),
-      description: 'Хорошее местоположение, новая мебель',
+      description: SETTINGS.description,
       photos: getRandomCountArray(PHOTO_URLS),
     },
     location,
