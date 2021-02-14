@@ -4,6 +4,16 @@ import {
   getRandomCountArray
 } from './util.js';
 
+
+const SETTINGS = {
+  arrayLength: 10,
+  avatars: { min: 1, max: 8 },
+  price: { min: 100, max: 1000 },
+  rooms: { min: 1, max: 7 },
+  title: 'Отличное предложение!',
+  guests: { min: 1, max: 10 },
+  description: 'Хорошее местоположение, новая мебель',
+};
 const OFFER_TYPE = ['palace', 'flat', 'house', 'bungalow'];
 const TIME = ['12:00', '13:00', '14:00'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -18,15 +28,15 @@ const createItem = () => {
 
   return {
     author: {
-      avatar: `im/avatars/user0${getRandomPositiveInteger(1, 8)}`,
+      avatar: `im/avatars/user0${getRandomPositiveInteger(SETTINGS.avatars.min, SETTINGS.avatars.max)}`,
     },
     offer: {
       title: 'Отличное предложение!',
       address: `${location.x}, ${location.y}`,
-      price: getRandomPositiveInteger(100, 1000),
+      price: getRandomPositiveInteger(SETTINGS.price.min, SETTINGS.price.max),
       type: OFFER_TYPE[getRandomPositiveInteger(0, OFFER_TYPE.length - 1)],
-      rooms: getRandomPositiveInteger(1, 7),
-      guests: getRandomPositiveInteger(1, 10),
+      rooms: getRandomPositiveInteger(SETTINGS.rooms.min, SETTINGS.rooms.max),
+      guests: getRandomPositiveInteger(SETTINGS.guests.min, SETTINGS.rooms.max),
       checkIn: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
       checkOut: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
       fetures: getRandomCountArray(FEATURES),
@@ -37,6 +47,6 @@ const createItem = () => {
   };
 };
 
-const LIST = new Array(10).fill(null).map(() => createItem());
+const LIST = new Array(SETTINGS.arrayLength).fill(null).map(() => createItem());
 
 export default LIST;

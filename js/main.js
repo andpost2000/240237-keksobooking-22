@@ -3,4 +3,4 @@ import { getRandomCountArray } from './util.js';
 
 getRandomCountArray(LIST);
 
-LIST.map(item => console.table(item.offer.fetures));
+// LIST.map(item => console.table(item));
