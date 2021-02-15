@@ -1,6 +1,3 @@
-import LIST from './data.js';
-import { getRandomCountArray } from './util.js';
+import { renderCard } from './render.js';
 
-getRandomCountArray(LIST);
-
-LIST.map(item => console.table(item));
+renderCard();

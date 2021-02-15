@@ -42,10 +42,14 @@ export const getRandomCountArray = (array) => {
   const getUniqueRandomInteger = makeUniqueRandomIntegerGenerator(0, lastIndex);
   const result = [];
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i <= length; i++) {
     const uiniqueIndex = getUniqueRandomInteger();
     result.push(array[uiniqueIndex]);
   }
 
   return result;
 };
+
+export const createElement = (tag) => {
+  return document.createElement(tag);
+}
