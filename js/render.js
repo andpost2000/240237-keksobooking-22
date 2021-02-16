@@ -18,10 +18,10 @@ const createCard = (item) => {
   cardElement.querySelector('.popup__avatar').src = author.avatar;
 
   const features = cardElement.querySelector('.popup__features');
-  const featuresItems = features.querySelectorAll('.popup__feature'); //filtered
+  const featuresItems = features.querySelectorAll('.popup__feature');
   for (let i = 0; i < featuresItems.length; i++) {
     let featureExist = false;
-    offer.fetures.forEach(item => {
+    offer.features.forEach(item => {
       featuresItems[i].classList.forEach(className => {
         if (className.includes(`-${item}`)) {
           featureExist = true;
@@ -30,12 +30,6 @@ const createCard = (item) => {
     });
     !featureExist && features.removeChild(featuresItems[i]);
   }
-  offer.fetures.forEach(feature => {
-    features.c
-    const element = createElement('div');
-    element.textContent = feature;
-    features.appendChild(element);
-  });
 
   const photos = cardElement.querySelector('.popup__photos');
   offer.photos.map(photoUrl => {

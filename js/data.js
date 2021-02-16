@@ -50,7 +50,7 @@ const createItem = () => {
       guests: getRandomPositiveInteger(SETTINGS.guests.min, SETTINGS.rooms.max),
       checkIn: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
       checkOut: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
-      fetures: getRandomCountArray(FEATURES),
+      features: getRandomCountArray(FEATURES),
       description: SETTINGS.description,
       photos: getRandomCountArray(PHOTO_URLS),
     },
