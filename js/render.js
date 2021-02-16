@@ -19,25 +19,20 @@ const createCard = (item) => {
 
   const features = cardElement.querySelector('.popup__features');
   const featuresItems = features.querySelectorAll('.popup__feature');
-  for (let i = 0; i < featuresItems.length; i++) {
-    let featureExist = false;
-    offer.features.forEach(item => {
-      featuresItems[i].classList.forEach(className => {
-        if (className.includes(`-${item}`)) {
-          featureExist = true;
-        }
-      });
-    });
-    !featureExist && features.removeChild(featuresItems[i]);
-  }
+  featuresItems.forEach(li => {
+    offer.features.some(feature => li.className.includes(`-${feature}`))
+      ? true
+      : li.remove();
+  })
 
   const photos = cardElement.querySelector('.popup__photos');
-  offer.photos.map(photoUrl => {
-    const photo = photos.querySelector('.popup__photo').cloneNode();
+  const fragment = document.createDocumentFragment();
+  offer.photos.forEach(photoUrl => {
+    const photo = photos.querySelector('.popup__photo').cloneNode(true);
     photo.src = photoUrl;
-    photos.appendChild(photo);
+    fragment.append(photo);
   });
-  photos.removeChild(photos.querySelector('.popup__photo'));
+  photos.querySelector('.popup__photo').replaceWith(fragment);
 
   return cardElement;
 };
