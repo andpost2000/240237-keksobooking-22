@@ -1,4 +1,3 @@
-import { createElement } from './util.js';
 import { createData } from './data.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
