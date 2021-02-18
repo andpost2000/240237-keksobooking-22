@@ -39,7 +39,7 @@ const createItem = () => {
 
   return {
     author: {
-      avatar: `im/avatars/user0${getRandomPositiveInteger(SETTINGS.avatars.min, SETTINGS.avatars.max)}`,
+      avatar: `img/avatars/user0${getRandomPositiveInteger(SETTINGS.avatars.min, SETTINGS.avatars.max)}.png`,
     },
     offer: {
       title: SETTINGS.title,
@@ -50,7 +50,7 @@ const createItem = () => {
       guests: getRandomPositiveInteger(SETTINGS.guests.min, SETTINGS.rooms.max),
       checkIn: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
       checkOut: TIME[getRandomPositiveInteger(0, TIME.length - 1)],
-      fetures: getRandomCountArray(FEATURES),
+      features: getRandomCountArray(FEATURES),
       description: SETTINGS.description,
       photos: getRandomCountArray(PHOTO_URLS),
     },
@@ -58,6 +58,6 @@ const createItem = () => {
   };
 };
 
-const LIST = new Array(SETTINGS.arrayLength).fill(null).map(() => createItem());
+const createData = () => new Array(SETTINGS.arrayLength).fill(null).map(() => createItem());
 
-export default LIST;
+export { createData };
