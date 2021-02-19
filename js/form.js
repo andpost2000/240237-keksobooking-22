@@ -1,12 +1,12 @@
-let form = document.querySelector('.ad-form');
-let fieldType = form.querySelector('#type');
-let fieldPrice = form.querySelector('#price');
-let fieldTimeIn = form.querySelector('#timein');
-let fieldTimeOut = form.querySelector('#timeout');
+const form = document.querySelector('.ad-form');
+const fieldType = form.querySelector('#type');
+const fieldPrice = form.querySelector('#price');
+const fieldTimeIn = form.querySelector('#timein');
+const fieldTimeOut = form.querySelector('#timeout');
 
 const onFieldType = (elem) => {
   const minPrice = {bungalow: '0', flat: '1000', house: '5000', palace: '10000'};
-  fieldPrice.setAttribute('placeholder', minPrice[elem.value]);
+  fieldPrice.placeholder = minPrice[elem.value];
 }
 
 const onFieldTimeIn = (elem) => {
@@ -20,15 +20,16 @@ const onFieldTimeOut = (elem) => {
 }
 
 const changeForm = (evt) => {
-  switch (evt.target) {
+  const { target } = evt;
+  switch (target) {
     case fieldType:
-      onFieldType(evt.target);
+      onFieldType(target);
       break;
     case fieldTimeIn:
-      onFieldTimeIn(evt.target);
+      onFieldTimeIn(target);
       break;
     case fieldTimeOut:
-      onFieldTimeOut(evt.target);
+      onFieldTimeOut(target);
       break;
     default:
       break;
