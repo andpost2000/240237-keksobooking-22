@@ -8,7 +8,7 @@ import {
 const SETTINGS = {
   arrayLength: 10,
   avatars: { min: 1, max: 8 },
-  price: { min: 100, max: 1000 },
+  price: { min: 0, max: 50000 },
   rooms: { min: 1, max: 7 },
   title: 'Отличное предложение!',
   guests: { min: 1, max: 10 },
