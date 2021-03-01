@@ -6,7 +6,7 @@ if (window.L) {
   L = window.L;
 }
 const onLoad = () => {
-  console.log('========onLoadMap=======')
+  console.log('========onLoadMap======')
   setFormChildrenState(mapFilters, false);
 };
 
