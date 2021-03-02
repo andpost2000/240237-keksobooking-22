@@ -59,5 +59,6 @@ const createItem = () => {
 };
 
 const createData = () => new Array(SETTINGS.arrayLength).fill(null).map(() => createItem());
+const data = createData();
 
-export { createData };
+export { data };

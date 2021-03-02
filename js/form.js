@@ -1,5 +1,3 @@
-// import { mymap }  from './map.js';
-
 const form = document.querySelector('.ad-form');
 const fieldType = form.querySelector('#type');
 const fieldPrice = form.querySelector('#price');
@@ -8,7 +6,6 @@ const fieldTimeOut = form.querySelector('#timeout');
 const mapFilters = document.querySelector('.map__filters');
 
 export const setFormChildrenState = (form, disabled = true) => {
-  console.log('========set=========', disabled);
   [...form.children].forEach(item => item.disabled = disabled);
 }
 
@@ -19,9 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (mapFilters) {
-    mapFilters.classList.add('map__filters-container--disabled');
+    mapFilters.classList.add('map__filters--disabled');
     setFormChildrenState(mapFilters);
-    // setTimeout(() => setFormChildrenState(mapFilters, false), 2000);
   }
 });
 

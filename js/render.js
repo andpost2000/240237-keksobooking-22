@@ -1,4 +1,4 @@
-import { createData } from './data.js';
+import { data } from './data.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const TYPE_RU = [{id: 'flat', name: 'Квартира '}, {id: 'bungalow', name: 'Бунгало'}, {id: 'house', name: 'Дом'}, {id: 'palace', name: 'Дворец'}];
@@ -24,7 +24,7 @@ const createPhoto = (cardElement, offer) => {
   });
   photos.querySelector('.popup__photo').replaceWith(fragment);
 };
-const createCard = (item) => {
+export const createCard = (item) => {
   const { author, offer } = item;
   const cardElement = cardTemplate.cloneNode(true);
 
@@ -44,7 +44,6 @@ const createCard = (item) => {
   return cardElement;
 };
 
-const data = createData();
 const mapCanvas = document.querySelector('.map__canvas');
 const card = createCard(data[0]);
 
