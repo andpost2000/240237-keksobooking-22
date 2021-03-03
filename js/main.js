@@ -1,4 +1,3 @@
-import { renderCard } from './render.js';
+// import './render.js';
 import './form.js';
-
-renderCard();
+import './map.js';

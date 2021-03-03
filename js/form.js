@@ -3,6 +3,23 @@ const fieldType = form.querySelector('#type');
 const fieldPrice = form.querySelector('#price');
 const fieldTimeIn = form.querySelector('#timein');
 const fieldTimeOut = form.querySelector('#timeout');
+const mapFilters = document.querySelector('.map__filters');
+
+export const setFormChildrenState = (form, disabled = true) => {
+  [...form.children].forEach(item => item.disabled = disabled);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (form) {
+    form.classList.add('ad-form--disabled');
+    setFormChildrenState(form);
+  }
+
+  if (mapFilters) {
+    mapFilters.classList.add('map__filters--disabled');
+    setFormChildrenState(mapFilters);
+  }
+});
 
 const onFieldType = (elem) => {
   const minPrice = {bungalow: '0', flat: '1000', house: '5000', palace: '10000'};
