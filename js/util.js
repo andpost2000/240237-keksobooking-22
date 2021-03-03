@@ -53,3 +53,15 @@ export const getRandomCountArray = (array) => {
 export const createElement = (tag) => {
   return document.createElement(tag);
 }
+
+export const minMaxLengthValidate = (target, min, max) => {
+  const valueLength = target.value.length;
+  if (valueLength < min) {
+    target.setCustomValidity('Ещё ' + (min - valueLength) +' симв.');
+  } else if (valueLength > max) {
+    target.setCustomValidity('Удалите лишние ' + (valueLength - max) +' симв.');
+  } else {
+    target.setCustomValidity('');
+  }
+  target.reportValidity();
+}
