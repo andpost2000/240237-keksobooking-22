@@ -1,26 +1,23 @@
-import { setFormChildrenState } from './form.js';
+import { setFormChildrenState } from './util.js';
 import { data } from './data.js';
 import { createCard } from './render.js';
 
 const mapFilters = document.querySelector('.map__filters');
 const form = document.querySelector('.ad-form');
 const address = form.querySelector('#address');
+const MAP_CENTER = { lat: 35.683, lng: 139.749 };
 
-let L = null;
-if (window.L) {
-  L = window.L;
-}
 
 const onLoad = () => {
-  setTimeout(() => {
-    form.classList.remove('ad-form--disabled');
-    mapFilters.classList.remove('map__filters--disabled');
-    setFormChildrenState(mapFilters, false);
-    setFormChildrenState(form, false);
-  }, 1);
+  form.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
+  setFormChildrenState(mapFilters, false);
+  setFormChildrenState(form, false);
 };
 
-export const mymap = L.map('map-canvas').on('load', onLoad).setView([35.683, 139.749], 13);
+/* global L:readonly */
+export const mymap = L.map('map-canvas').on('load', onLoad).setView(MAP_CENTER, 13);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kcG9zdDIwMDAiLCJhIjoiY2tsbW8wMzIwMDAyaDJvbW50ODAxejZ2ciJ9.wMqFqT2J3hPnWO_UaoH0Xw', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -40,10 +37,7 @@ const mainPinIcon = L.icon(
 );
 
 const mainPinMarker = L.marker(
-  {
-    lat: 35.683,
-    lng: 139.749,
-  },
+  MAP_CENTER,
   {
     draggable: true,
     icon: mainPinIcon,
