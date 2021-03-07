@@ -1,4 +1,4 @@
-import { minMaxLengthValidate } from './util.js';
+import { minMaxLengthValidate, setFormChildrenState } from './util.js';
 
 const form = document.querySelector('.ad-form');
 const fieldTitle = form.querySelector('#title');
@@ -15,21 +15,15 @@ const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
 const MIN_PRICE = { bungalow: '0', flat: '1000', house: '5000', palace: '10000' };
 
-export const setFormChildrenState = (form, disabled = true) => {
-  [...form.children].forEach(item => item.disabled = disabled);
+if (form) {
+  form.classList.add('ad-form--disabled');
+  setFormChildrenState(form, true);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (form) {
-    form.classList.add('ad-form--disabled');
-    setFormChildrenState(form);
-  }
-
-  if (mapFilters) {
-    mapFilters.classList.add('map__filters--disabled');
-    setFormChildrenState(mapFilters);
-  }
-});
+if (mapFilters) {
+  mapFilters.classList.add('map__filters--disabled');
+  setFormChildrenState(mapFilters, true);
+}
 
 const onFieldType = (elem) => {
   fieldPrice.placeholder = MIN_PRICE[elem.value];
@@ -65,7 +59,7 @@ const onFieldPrice = (elem) => {
   const value = Number(elem.value);
   const minPrice = Number(MIN_PRICE[fieldType.value]);
   if (value > MAX_PRICE) {
-    elem.setCustomValidity('Максимальная цена превышена на ' + (value - MAX_PRICE) +' руб.');
+    elem.setCustomValidity('Максимальная цена превышена на ' + (value - MAX_PRICE) + ' руб.');
   } else if (value < minPrice) {
     elem.setCustomValidity('Минимальная цена должна быть выше на ' + (minPrice - value) + ' руб.');
   } else {

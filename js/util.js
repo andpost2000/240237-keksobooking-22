@@ -65,3 +65,7 @@ export const minMaxLengthValidate = (target, min, max) => {
   }
   target.reportValidity();
 }
+
+export const setFormChildrenState = (form, disabled) => {
+  [...form.children].forEach(item => item.disabled = disabled);
+}
