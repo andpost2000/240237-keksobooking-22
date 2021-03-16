@@ -1,4 +1,6 @@
-import { minMaxLengthValidate, setFormChildrenState } from './util.js';
+import { MAP_CENTER, minMaxLengthValidate, setFormChildrenState } from './util.js';
+import { sendData } from './api.js';
+import { showModal } from './modal.js';
 
 const form = document.querySelector('.ad-form');
 const fieldTitle = form.querySelector('#title');
@@ -9,6 +11,8 @@ const fieldTimeOut = form.querySelector('#timeout');
 const fieldRoomNumber = form.querySelector('#room_number');
 const fieldCapacity = form.querySelector('#capacity');
 const mapFilters = document.querySelector('.map__filters');
+const address = form.querySelector('#address');
+const resetButton = form.querySelector('.ad-form__reset');
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -103,3 +107,30 @@ const changeForm = (evt) => {
 }
 
 form.addEventListener('change', changeForm);
+
+const submitSuccess = () => {
+  showModal('success');
+  form.reset();
+  address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
+};
+
+const submitError = () => {
+  showModal('error');
+};
+
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const formData = new FormData(evt.target);
+  sendData(
+    submitSuccess,
+    submitError,
+    formData,
+  );
+});
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  mapFilters.reset();
+  form.reset();
+  address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
+})

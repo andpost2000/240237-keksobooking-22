@@ -1,7 +1,5 @@
-import { data } from './data.js';
-
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-const TYPE_RU = [{id: 'flat', name: 'Квартира '}, {id: 'bungalow', name: 'Бунгало'}, {id: 'house', name: 'Дом'}, {id: 'palace', name: 'Дворец'}];
+const TYPE_RU = [{ id: 'flat', name: 'Квартира ' }, { id: 'bungalow', name: 'Бунгало' }, { id: 'house', name: 'Дом' }, { id: 'palace', name: 'Дворец' }];
 const createType = (type, dictionary) => {
   return dictionary.find(item => item.id === type).name;
 }
@@ -34,8 +32,8 @@ export const createCard = (item) => {
   cardElement.querySelector('.popup__type').textContent = createType(offer.type, TYPE_RU);
   cardElement.querySelector('.popup__text--capacity').textContent =
     `${offer.rooms} комнат${offer.rooms < 2 ? 'а' : offer.rooms < 5 ? 'ы' : ''} для ${offer.guests} гост${offer.guests > 1 ? 'ей' : 'я'}`;
-  cardElement.querySelector('.popup__text--time').textContent = 
-    `Заезд после ${offer.checkIn}, выезд до ${offer.checkOut}.`;
+  cardElement.querySelector('.popup__text--time').textContent =
+    `Заезд после ${offer.checkin}, выезд до ${offer.checkout}.`;
   cardElement.querySelector('.popup__description').textContent = offer.description;
   cardElement.querySelector('.popup__avatar').src = author.avatar;
   filterFeatures(cardElement, offer);
@@ -43,10 +41,3 @@ export const createCard = (item) => {
 
   return cardElement;
 };
-
-const mapCanvas = document.querySelector('.map__canvas');
-const card = createCard(data[0]);
-
-const renderCard = () => mapCanvas && mapCanvas.appendChild(card);
-
-export { renderCard };

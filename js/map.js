@@ -1,11 +1,10 @@
-import { setFormChildrenState } from './util.js';
-import { data } from './data.js';
+import { MAP_CENTER, setFormChildrenState } from './util.js';
+import { getData } from './api.js';
 import { createCard } from './render.js';
 
 const mapFilters = document.querySelector('.map__filters');
 const form = document.querySelector('.ad-form');
 const address = form.querySelector('#address');
-const MAP_CENTER = { lat: 35.683, lng: 139.749 };
 
 
 const onLoad = () => {
@@ -48,28 +47,38 @@ mainPinMarker.on('moveend', (evt) => {
   address.value = `${evt.target.getLatLng().lat.toFixed(3)}, ${evt.target.getLatLng().lng.toFixed(3)}`;
 });
 
-data.forEach((data) => {
-  const {x, y} = data.location;
-  const icon = L.icon({
-    iconUrl: '/img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
-  const marker = L.marker(
-    {
-      lat: x,
-      lng: y,
-    },
-    {
-      icon,
-    },
-  );
-  marker
-    .addTo(mymap)
-    .bindPopup(
-      createCard(data),
-      {
-        keepInView: true,
-      },
-    );
-});
+const getDataAndRenderMarker = getData(
+  (data) => {
+    data.forEach((item) => {
+      const { lat, lng } = item.location;
+      const icon = L.icon({
+        iconUrl: '/img/pin.svg',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+      });
+      const marker = L.marker(
+        {
+          lat,
+          lng,
+        },
+        {
+          icon,
+        },
+      );
+      marker
+        .addTo(mymap)
+        .bindPopup(
+          createCard(item),
+          {
+            keepInView: true,
+          },
+        );
+    });
+  },
+  (err) => {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  },
+);
+
+getDataAndRenderMarker();
