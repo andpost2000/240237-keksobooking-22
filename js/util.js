@@ -69,3 +69,5 @@ export const minMaxLengthValidate = (target, min, max) => {
 export const setFormChildrenState = (form, disabled) => {
   [...form.children].forEach(item => item.disabled = disabled);
 }
+
+export const MAP_CENTER = { lat: 35.683, lng: 139.749 };
