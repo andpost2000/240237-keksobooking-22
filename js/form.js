@@ -40,19 +40,16 @@ const onFieldTimeIn = (elem) => {
 }
 
 const onFieldRoomNumber = (elem) => {
-  if (fieldCapacity.value > elem.value) {
-    fieldCapacity.value = elem.value;
+  const value = elem.value;
+  const roomForGuestsMap = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0'],
   }
-};
-
-const onFieldCapacity = (elem) => {
-  if (elem.value > fieldRoomNumber.value) {
-    elem.value = fieldRoomNumber.value;
-    elem.setCustomValidity('Максимально ' + fieldRoomNumber.value);
-  } else {
-    elem.setCustomValidity('');
-  }
-  elem.reportValidity();
+  Array.from(fieldCapacity.options)
+    .forEach(option => option.disabled = !roomForGuestsMap[value].includes(option.value));
+  fieldCapacity.value = Number(value) > 3 ? '0' : value;
 };
 
 const onFieldTitle = (elem) => {
@@ -86,17 +83,8 @@ const changeForm = (evt) => {
     case fieldTimeIn:
       onFieldTimeIn(target);
       break;
-    case fieldTitle:
-      onFieldTitle(target);
-      break;
-    case fieldPrice:
-      onFieldPrice(target);
-      break;
     case fieldRoomNumber:
       onFieldRoomNumber(target);
-      break;
-    case fieldCapacity:
-      onFieldCapacity(target);
       break;
     case fieldTimeOut:
       onFieldTimeOut(target);
@@ -104,9 +92,25 @@ const changeForm = (evt) => {
     default:
       break;
   }
-}
+};
 
 form.addEventListener('change', changeForm);
+
+const inputForm = (evt) => {
+  const { target } = evt;
+  switch (target) {
+    case fieldTitle:
+      onFieldTitle(target);
+      break;
+    case fieldPrice:
+      onFieldPrice(target);
+      break;
+    default:
+      break;
+  }
+};
+
+form.addEventListener('input', inputForm);
 
 const submitSuccess = () => {
   showModal('success');
@@ -133,4 +137,11 @@ resetButton.addEventListener('click', (evt) => {
   mapFilters.reset();
   form.reset();
   address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
-})
+});
+
+const onFilter = (cb) => {
+  mapFilters.addEventListener('change', cb);
+};
+
+export {onFilter};
+
