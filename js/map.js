@@ -1,10 +1,14 @@
 import { MAP_CENTER, setFormChildrenState } from './util.js';
-import { getData } from './api.js';
 import { createCard } from './render.js';
 
 const mapFilters = document.querySelector('.map__filters');
+const roomsField = mapFilters.querySelector('#housing-rooms');
+const typeField = mapFilters.querySelector('#housing-type');
+const priceField = mapFilters.querySelector('#housing-price');
+const guestsField = mapFilters.querySelector('#housing-guests');
 const form = document.querySelector('.ad-form');
 const address = form.querySelector('#address');
+const RENDER_PIN_COUNT = 10;
 
 
 const onLoad = () => {
@@ -16,7 +20,7 @@ const onLoad = () => {
 };
 
 /* global L:readonly */
-export const mymap = L.map('map-canvas').on('load', onLoad).setView(MAP_CENTER, 13);
+export const mymap = L.map('map-canvas').on('load', onLoad).setView(MAP_CENTER, 10);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kcG9zdDIwMDAiLCJhIjoiY2tsbW8wMzIwMDAyaDJvbW50ODAxejZ2ciJ9.wMqFqT2J3hPnWO_UaoH0Xw', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -47,9 +51,54 @@ mainPinMarker.on('moveend', (evt) => {
   address.value = `${evt.target.getLatLng().lat.toFixed(3)}, ${evt.target.getLatLng().lng.toFixed(3)}`;
 });
 
-const getDataAndRenderMarker = getData(
-  (data) => {
-    data.forEach((item) => {
+const pinsFilter = (data, evt) => {
+  const priceRange = {
+    low: {
+      min: 0,
+      max: 9999,
+    },
+    middle: {
+      min: 10000,
+      max: 49999,
+    },
+    high: {
+      min: 50000,
+      max: 1000000,
+    },
+  };
+  let filteredData = data.slice();
+  const checkedFeatures = mapFilters.querySelectorAll('.map__checkbox:checked');
+  if (evt) {
+    if (typeField.value !== 'any') {
+      filteredData = filteredData.filter(item => item.offer.type === typeField.value);
+    }
+    if (priceField.value !== 'any') {
+      filteredData = filteredData.filter(item => (item.offer.price >= priceRange[priceField.value].min && item.offer.price <= priceRange[priceField.value].max));
+    }
+    if (roomsField.value !== 'any') {
+      filteredData = filteredData.filter(item => item.offer.rooms === Number(roomsField.value));
+    }
+    if (guestsField.value !== 'any') {
+      filteredData = filteredData.filter(item => item.offer.guests === Number(guestsField.value));
+    }
+    if (checkedFeatures.length) {
+      filteredData = filteredData.filter(
+        item => [...checkedFeatures].every(feature => item.offer.features.includes(feature.value)));
+    }
+    return filteredData;
+  } else {
+    return data.slice();
+  }
+}
+
+let pins = [];
+
+const renderMarker = (data, evt) => {
+  pins.forEach((pin) => pin.remove());
+
+  pinsFilter(data, evt)
+    .slice(0, RENDER_PIN_COUNT)
+    .forEach((item) => {
       const { lat, lng } = item.location;
       const icon = L.icon({
         iconUrl: '/img/pin.svg',
@@ -73,12 +122,9 @@ const getDataAndRenderMarker = getData(
             keepInView: true,
           },
         );
-    });
-  },
-  (err) => {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  },
-);
 
-getDataAndRenderMarker();
+      pins.push(marker);
+    });
+};
+
+export { renderMarker };
