@@ -33,7 +33,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 
 const mainPinIcon = L.icon(
   {
-    iconUrl: '/img/main-pin.svg',
+    iconUrl: 'img/main-pin.svg',
     iconSize: [52, 52],
     iconAnchor: [26, 52],
   },
@@ -101,7 +101,7 @@ const renderMarker = (data, evt) => {
     .forEach((item) => {
       const { lat, lng } = item.location;
       const icon = L.icon({
-        iconUrl: '/img/pin.svg',
+        iconUrl: 'img/pin.svg',
         iconSize: [40, 40],
         iconAnchor: [20, 40],
       });
