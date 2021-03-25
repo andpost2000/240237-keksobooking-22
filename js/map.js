@@ -1,4 +1,4 @@
-import { MAP_CENTER, setFormChildrenState } from './util.js';
+import { MAP_CENTER_COORDS, setFormChildrenState } from './util.js';
 import { createCard } from './render.js';
 
 const mapFilters = document.querySelector('.map__filters');
@@ -9,18 +9,19 @@ const guestsField = mapFilters.querySelector('#housing-guests');
 const form = document.querySelector('.ad-form');
 const address = form.querySelector('#address');
 const RENDER_PIN_COUNT = 10;
+const MAIN_ZOOM = 10;
 
 
-const onLoad = () => {
+const onMapLoad = () => {
   form.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');
-  address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
+  address.value = `${MAP_CENTER_COORDS.lat.toFixed(3)}, ${MAP_CENTER_COORDS.lng.toFixed(3)}`;
   setFormChildrenState(mapFilters, false);
   setFormChildrenState(form, false);
 };
 
 /* global L:readonly */
-export const mymap = L.map('map-canvas').on('load', onLoad).setView(MAP_CENTER, 10);
+const mymap = L.map('map-canvas').setView(MAP_CENTER_COORDS, MAIN_ZOOM);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kcG9zdDIwMDAiLCJhIjoiY2tsbW8wMzIwMDAyaDJvbW50ODAxejZ2ciJ9.wMqFqT2J3hPnWO_UaoH0Xw', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -40,18 +41,25 @@ const mainPinIcon = L.icon(
 );
 
 const mainPinMarker = L.marker(
-  MAP_CENTER,
+  MAP_CENTER_COORDS,
   {
     draggable: true,
     icon: mainPinIcon,
   },
-).addTo(mymap);
+);
+
+mainPinMarker.addTo(mymap);
+
+const resetMainMarker = () => {
+  mainPinMarker.setLatLng(MAP_CENTER_COORDS);
+  mymap.setView(MAP_CENTER_COORDS, MAIN_ZOOM);
+};
 
 mainPinMarker.on('moveend', (evt) => {
   address.value = `${evt.target.getLatLng().lat.toFixed(3)}, ${evt.target.getLatLng().lng.toFixed(3)}`;
 });
 
-const pinsFilter = (data, evt) => {
+const filterPins = (data, evt) => {
   const priceRange = {
     low: {
       min: 0,
@@ -87,16 +95,16 @@ const pinsFilter = (data, evt) => {
     }
     return filteredData;
   } else {
-    return data.slice();
+    return data;
   }
 }
 
-let pins = [];
+const pins = [];
 
 const renderMarker = (data, evt) => {
   pins.forEach((pin) => pin.remove());
 
-  pinsFilter(data, evt)
+  filterPins(data, evt)
     .slice(0, RENDER_PIN_COUNT)
     .forEach((item) => {
       const { lat, lng } = item.location;
@@ -125,6 +133,9 @@ const renderMarker = (data, evt) => {
 
       pins.push(marker);
     });
+
+  onMapLoad();
 };
 
-export { renderMarker };
+resetMainMarker();
+export { renderMarker, resetMainMarker };

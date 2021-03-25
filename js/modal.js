@@ -2,29 +2,29 @@ const main = document.querySelector('main');
 const successModalTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorModalTemplate = document.querySelector('#error').content.querySelector('.error');
 
-const showRemoveModal = (modalElement) => {
+const renderModal = (modalElement) => {
   main.appendChild(modalElement);
-  const removeModalOnClick = () => {
+  const onModalOverlayClick = () => {
     main.removeChild(modalElement);
-    modalElement.removeEventListener('click', removeModalOnClick);
+    modalElement.removeEventListener('click', onModalOverlayClick);
   };
-  modalElement.addEventListener('click', removeModalOnClick);
-  const removeModalOnEsc = (evt) => {
+  modalElement.addEventListener('click', onModalOverlayClick);
+  const onDocumentKeyup = (evt) => {
     if (evt.key === 'Escape') {
       main.removeChild(modalElement);
-      document.removeEventListener('keyup', removeModalOnEsc);
+      document.removeEventListener('keyup', onDocumentKeyup);
     }
   };
-  document.addEventListener('keyup', removeModalOnEsc);
+  document.addEventListener('keyup', onDocumentKeyup);
 };
 
 const showModal = (id) => {
   if (id === 'success') {
     const modalElement = successModalTemplate.cloneNode(true);
-    showRemoveModal(modalElement);
+    renderModal(modalElement);
   } else if (id === 'error') {
     const modalElement = errorModalTemplate.cloneNode(true);
-    showRemoveModal(modalElement);
+    renderModal(modalElement);
   }
 }
 

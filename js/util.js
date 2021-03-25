@@ -70,4 +70,4 @@ export const setFormChildrenState = (form, disabled) => {
   [...form.children].forEach(item => item.disabled = disabled);
 }
 
-export const MAP_CENTER = { lat: 35.683, lng: 139.749 };
+export const MAP_CENTER_COORDS = { lat: 35.683, lng: 139.749 };

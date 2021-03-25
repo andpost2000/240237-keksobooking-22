@@ -1,4 +1,6 @@
-import { MAP_CENTER, minMaxLengthValidate, setFormChildrenState } from './util.js';
+
+import { resetMainMarker } from './map.js';
+import { MAP_CENTER_COORDS, minMaxLengthValidate, setFormChildrenState } from './util.js';
 import { sendData } from './api.js';
 import { showModal } from './modal.js';
 
@@ -29,17 +31,17 @@ if (mapFilters) {
   setFormChildrenState(mapFilters, true);
 }
 
-const onFieldType = (elem) => {
+const onFieldTypeChange = (elem) => {
   fieldPrice.placeholder = MIN_PRICE[elem.value];
-  onFieldPrice(fieldPrice);
+  onFieldPriceInput(fieldPrice);
 }
 
-const onFieldTimeIn = (elem) => {
+const onFieldTimeInChange = (elem) => {
   const selectedOptionIndex = elem.selectedIndex;
   fieldTimeOut.selectedIndex = selectedOptionIndex;
 }
 
-const onFieldRoomNumber = (elem) => {
+const onFieldRoomNumberChange = (elem) => {
   const value = elem.value;
   const roomForGuestsMap = {
     '1': ['1'],
@@ -52,11 +54,11 @@ const onFieldRoomNumber = (elem) => {
   fieldCapacity.value = Number(value) > 3 ? '0' : value;
 };
 
-const onFieldTitle = (elem) => {
+const onFieldTitleInput = (elem) => {
   minMaxLengthValidate(elem, MIN_TITLE_LENGTH, MAX_TITLE_LENGTH);
 };
 
-const onFieldPrice = (elem) => {
+const onFieldPriceInput = (elem) => {
   const value = Number(elem.value);
   const minPrice = Number(MIN_PRICE[fieldType.value]);
   if (value > MAX_PRICE) {
@@ -69,56 +71,57 @@ const onFieldPrice = (elem) => {
   elem.reportValidity();
 };
 
-const onFieldTimeOut = (elem) => {
+const onFieldTimeOutChange = (elem) => {
   const selectedOptionIndex = elem.selectedIndex;
   fieldTimeIn.selectedIndex = selectedOptionIndex;
 }
 
-const changeForm = (evt) => {
+const onCreateFormChange = (evt) => {
   const { target } = evt;
   switch (target) {
     case fieldType:
-      onFieldType(target);
+      onFieldTypeChange(target);
       break;
     case fieldTimeIn:
-      onFieldTimeIn(target);
+      onFieldTimeInChange(target);
       break;
     case fieldRoomNumber:
-      onFieldRoomNumber(target);
+      onFieldRoomNumberChange(target);
       break;
     case fieldTimeOut:
-      onFieldTimeOut(target);
+      onFieldTimeOutChange(target);
       break;
     default:
       break;
   }
 };
 
-form.addEventListener('change', changeForm);
+form.addEventListener('change', onCreateFormChange);
 
-const inputForm = (evt) => {
+const onCreateFormInput = (evt) => {
   const { target } = evt;
   switch (target) {
     case fieldTitle:
-      onFieldTitle(target);
+      onFieldTitleInput(target);
       break;
     case fieldPrice:
-      onFieldPrice(target);
+      onFieldPriceInput(target);
       break;
     default:
       break;
   }
 };
 
-form.addEventListener('input', inputForm);
+form.addEventListener('input', onCreateFormInput);
 
-const submitSuccess = () => {
+const onCreateFormSubmitSuccess = () => {
   showModal('success');
   form.reset();
-  address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
+  resetMainMarker();
+  address.value = `${MAP_CENTER_COORDS.lat.toFixed(3)}, ${MAP_CENTER_COORDS.lng.toFixed(3)}`;
 };
 
-const submitError = () => {
+const onCreateFormSubmitError = () => {
   showModal('error');
 };
 
@@ -126,8 +129,8 @@ form.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const formData = new FormData(evt.target);
   sendData(
-    submitSuccess,
-    submitError,
+    onCreateFormSubmitSuccess,
+    onCreateFormSubmitError,
     formData,
   );
 });
@@ -136,12 +139,12 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   mapFilters.reset();
   form.reset();
-  address.value = `${MAP_CENTER.lat.toFixed(3)}, ${MAP_CENTER.lng.toFixed(3)}`;
+  resetMainMarker();
+  address.value = `${MAP_CENTER_COORDS.lat.toFixed(3)}, ${MAP_CENTER_COORDS.lng.toFixed(3)}`;
 });
 
 const onFilter = (cb) => {
   mapFilters.addEventListener('change', cb);
 };
 
-export {onFilter};
-
+export { onFilter };
