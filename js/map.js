@@ -1,6 +1,8 @@
-import { MAP_CENTER_COORDS, setFormChildrenState } from './util.js';
+import { MAP_CENTER_COORDS, setFormChildrenState, setFieldCapacityOptionsState } from './util.js';
 import { createCard } from './render.js';
 
+const RENDER_PIN_COUNT = 10;
+const MAIN_ZOOM = 10;
 const mapFilters = document.querySelector('.map__filters');
 const roomsField = mapFilters.querySelector('#housing-rooms');
 const typeField = mapFilters.querySelector('#housing-type');
@@ -8,9 +10,8 @@ const priceField = mapFilters.querySelector('#housing-price');
 const guestsField = mapFilters.querySelector('#housing-guests');
 const form = document.querySelector('.ad-form');
 const address = form.querySelector('#address');
-const RENDER_PIN_COUNT = 10;
-const MAIN_ZOOM = 10;
-
+const fieldRoomNumber = form.querySelector('#room_number');
+const fieldCapacity = form.querySelector('#capacity');
 
 const onMapLoad = () => {
   form.classList.remove('ad-form--disabled');
@@ -18,19 +19,8 @@ const onMapLoad = () => {
   address.value = `${MAP_CENTER_COORDS.lat.toFixed(3)}, ${MAP_CENTER_COORDS.lng.toFixed(3)}`;
   setFormChildrenState(mapFilters, false);
   setFormChildrenState(form, false);
+  setFieldCapacityOptionsState(fieldCapacity, fieldRoomNumber.value);
 };
-
-/* global L:readonly */
-const mymap = L.map('map-canvas').setView(MAP_CENTER_COORDS, MAIN_ZOOM);
-
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kcG9zdDIwMDAiLCJhIjoiY2tsbW8wMzIwMDAyaDJvbW50ODAxejZ2ciJ9.wMqFqT2J3hPnWO_UaoH0Xw', {
-  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  maxZoom: 18,
-  id: 'mapbox/streets-v11',
-  tileSize: 512,
-  zoomOffset: -1,
-  accessToken: 'your.mapbox.access.token',
-}).addTo(mymap);
 
 const mainPinIcon = L.icon(
   {
@@ -48,16 +38,13 @@ const mainPinMarker = L.marker(
   },
 );
 
-mainPinMarker.addTo(mymap);
-
 const resetMainMarker = () => {
   mainPinMarker.setLatLng(MAP_CENTER_COORDS);
   mymap.setView(MAP_CENTER_COORDS, MAIN_ZOOM);
 };
 
-mainPinMarker.on('moveend', (evt) => {
-  address.value = `${evt.target.getLatLng().lat.toFixed(3)}, ${evt.target.getLatLng().lng.toFixed(3)}`;
-});
+/* global L:readonly */
+const mymap = L.map('map-canvas').setView(MAP_CENTER_COORDS, MAIN_ZOOM);
 
 const filterPins = (data, evt) => {
   const priceRange = {
@@ -93,11 +80,9 @@ const filterPins = (data, evt) => {
       filteredData = filteredData.filter(
         item => [...checkedFeatures].every(feature => item.offer.features.includes(feature.value)));
     }
-    return filteredData;
-  } else {
-    return data;
   }
-}
+  return filteredData;
+};
 
 const pins = [];
 
@@ -137,5 +122,19 @@ const renderMarker = (data, evt) => {
   onMapLoad();
 };
 
-resetMainMarker();
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kcG9zdDIwMDAiLCJhIjoiY2tsbW8wMzIwMDAyaDJvbW50ODAxejZ2ciJ9.wMqFqT2J3hPnWO_UaoH0Xw', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  maxZoom: 18,
+  id: 'mapbox/streets-v11',
+  tileSize: 512,
+  zoomOffset: -1,
+  accessToken: 'your.mapbox.access.token',
+}).addTo(mymap);
+
+mainPinMarker.addTo(mymap);
+
+mainPinMarker.on('moveend', (evt) => {
+  address.value = `${evt.target.getLatLng().lat.toFixed(3)}, ${evt.target.getLatLng().lng.toFixed(3)}`;
+});
+
 export { renderMarker, resetMainMarker };

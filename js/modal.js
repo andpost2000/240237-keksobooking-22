@@ -7,6 +7,7 @@ const renderModal = (modalElement) => {
   const onModalOverlayClick = () => {
     main.removeChild(modalElement);
     modalElement.removeEventListener('click', onModalOverlayClick);
+    document.removeEventListener('keyup', onDocumentKeyup);
   };
   modalElement.addEventListener('click', onModalOverlayClick);
   const onDocumentKeyup = (evt) => {

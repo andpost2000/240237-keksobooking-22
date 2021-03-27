@@ -1,5 +1,5 @@
-const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const OFFER_TYPE_RU = [{ id: 'flat', name: 'Квартира ' }, { id: 'bungalow', name: 'Бунгало' }, { id: 'house', name: 'Дом' }, { id: 'palace', name: 'Дворец' }];
+const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const getOfferType = (type, dictionary) => {
   return dictionary.find(item => item.id === type).name;
 }
@@ -25,7 +25,6 @@ const createPopupPhotos = (cardElement, offer) => {
 const createCard = (item) => {
   const { author, offer } = item;
   const cardElement = cardTemplate.cloneNode(true);
-
   const titleElement = cardElement.querySelector('.popup__title');
   const addressElement = cardElement.querySelector('.popup__text--address');
   const priceElement = cardElement.querySelector('.popup__text--price');
