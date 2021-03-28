@@ -89,14 +89,18 @@ const onCreateFormInput = (evt) => {
   }
 };
 
-form.addEventListener('input', onCreateFormInput);
-
-const onCreateFormSubmitSuccess = () => {
-  showModal('success');
+const setAppDefault = () => {
   form.reset();
+  mapFilters.reset();
   fieldPrice.placeholder = MIN_PRICE[fieldType.value];
   resetMainMarker();
   address.value = `${MAP_CENTER_COORDS.lat.toFixed(3)}, ${MAP_CENTER_COORDS.lng.toFixed(3)}`;
+  setFieldCapacityOptionsState(fieldCapacity, fieldRoomNumber.value);
+};
+
+const onCreateFormSubmitSuccess = () => {
+  showModal('success');
+  setAppDefault();
 };
 
 const onCreateFormSubmitError = () => {
@@ -106,6 +110,12 @@ const onCreateFormSubmitError = () => {
 const onFilter = (cb) => {
   mapFilters.addEventListener('change', cb);
 };
+
+const resetFilter = (cb) => {
+  mapFilters.addEventListener('reset', cb);
+};
+
+form.addEventListener('input', onCreateFormInput);
 
 if (form) {
   form.classList.add('ad-form--disabled');
@@ -131,10 +141,7 @@ form.addEventListener('submit', (evt) => {
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  mapFilters.reset();
-  form.reset();
-  resetMainMarker();
-  address.value = `${MAP_CENTER_COORDS.lat.toFixed(3)}, ${MAP_CENTER_COORDS.lng.toFixed(3)}`;
+  setAppDefault();
 });
 
-export { onFilter };
+export { onFilter, resetFilter };

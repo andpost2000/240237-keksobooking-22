@@ -1,6 +1,6 @@
 /* global _:readonly */
 
-import { onFilter } from './form.js';
+import { onFilter, resetFilter } from './form.js';
 import { renderMarker } from './map.js';
 import { getData } from './api.js';
 
@@ -14,6 +14,9 @@ getData(
         (evt) => renderMarker(data, evt),
         DELAY,
       ),
+    );
+    resetFilter(
+      () => renderMarker(data),
     );
   },
   (err) => {

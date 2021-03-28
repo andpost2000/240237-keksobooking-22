@@ -119,7 +119,9 @@ const renderMarker = (data, evt) => {
       pins.push(marker);
     });
 
-  onMapLoad();
+  if (!evt) {
+    onMapLoad();
+  }
 };
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5kcG9zdDIwMDAiLCJhIjoiY2tsbW8wMzIwMDAyaDJvbW50ODAxejZ2ciJ9.wMqFqT2J3hPnWO_UaoH0Xw', {
